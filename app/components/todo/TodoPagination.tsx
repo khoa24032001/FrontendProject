@@ -10,11 +10,11 @@ export default function TodoPagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-center gap-4 pt-4">
+    <div className="flex items-center justify-center gap-4 pt-4 text-sm sm:text-base">
       <button
         disabled={page === 1}
         onClick={() => onPageChange(page - 1)}
-        className="px-3 py-1 rounded border disabled:opacity-40"
+        className="px-3 py-2 sm:px-4 sm:py-2 rounded border disabled:opacity-40"
       >
         Prev
       </button>
@@ -26,7 +26,7 @@ export default function TodoPagination({
       <button
         disabled={page === totalPages}
         onClick={() => onPageChange(page + 1)}
-        className="px-3 py-1 rounded border disabled:opacity-40"
+        className="px-3 py-2 sm:px-4 sm:py-2 rounded border disabled:opacity-40"
       >
         Next
       </button>

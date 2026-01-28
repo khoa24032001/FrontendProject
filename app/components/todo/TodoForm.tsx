@@ -5,7 +5,7 @@ export default function TodoForm({ onAdd }: { onAdd: (title: string) => void }) 
 
   return (
     <form
-      className="flex gap-2"
+      className="flex flex-col sm:flex-row gap-2"
       onSubmit={e => {
         e.preventDefault();
         if (!value.trim()) return;
@@ -19,7 +19,7 @@ export default function TodoForm({ onAdd }: { onAdd: (title: string) => void }) 
         value={value}
         onChange={e => setValue(e.target.value)}
       />
-      <button className="px-4 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black">
+      <button className="w-full sm:w-auto px-4 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black cursor-pointer">
         Add
       </button>
     </form>

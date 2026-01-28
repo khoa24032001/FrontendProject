@@ -29,14 +29,27 @@ export default function TodoItem({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg border dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition">
+    <div
+      onClick={() => {
+        if (!isEditing) onToggle();
+      }}
+      className="
+        flex flex-col gap-2
+        sm:flex-row sm:items-center sm:justify-between 
+        p-3 rounded-lg border dark:border-gray-800 
+        hover:bg-gray-50 dark:hover:bg-gray-900 
+        transition cursor-pointer
+      "
+    >
       <div className="flex flex-col gap-1 flex-1">
         {isEditing ? (
           <input
             autoFocus
             value={value}
+            onClick={(e) => e.stopPropagation()}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={(e) => {
+              e.stopPropagation();
               if (e.key === "Enter") handleSave();
               if (e.key === "Escape") {
                 setValue(todo.title);
@@ -47,7 +60,10 @@ export default function TodoItem({
           />
         ) : (
           <>
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-2 cursor-pointer"
+            >
               <input
                 type="checkbox"
                 checked={todo.completed}
@@ -55,7 +71,9 @@ export default function TodoItem({
               />
               <span
                 className={
-                  todo.completed ? "line-through text-gray-500" : "font-medium"
+                  todo.completed
+                    ? "line-through text-gray-500"
+                    : "font-medium"
                 }
               >
                 {todo.title}
@@ -72,11 +90,14 @@ export default function TodoItem({
         )}
       </div>
 
-      <div className="flex items-center gap-2 ml-2">
+      <div
+        className="flex items-center gap-3 sm:ml-2"
+        onClick={(e) => e.stopPropagation()}
+      >
         {!isEditing && (
           <button
             onClick={() => setIsEditing(true)}
-            className="text-blue-500 text-sm hover:underline"
+            className="text-blue-500 text-sm hover:underline cursor-pointer"
           >
             Edit
           </button>
@@ -85,7 +106,7 @@ export default function TodoItem({
         {isEditing && (
           <button
             onClick={handleSave}
-            className="text-green-600 text-sm hover:underline"
+            className="text-green-600 text-sm hover:underline cursor-pointer"
           >
             Save
           </button>
@@ -93,7 +114,7 @@ export default function TodoItem({
 
         <button
           onClick={onDelete}
-          className="text-red-500 hover:text-red-600 text-sm"
+          className="text-red-500 hover:text-red-600 text-sm cursor-pointer"
         >
           ✕
         </button>

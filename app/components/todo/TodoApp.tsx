@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTodos, useUsers } from "~/features/todos/hooks";
+import { useToast } from "~/components/toast/ToastContext";
+import { useTheme } from "~/hooks/useTheme";
 
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import TodoStats from "./TodoStats";
 import TodoToolbar from "./TodoToolbar";
 import TodoPagination from "./TodoPagination";
+import { MoonIcon,  SunIcon } from "../Icons";
 
 const PAGE_SIZE = 10;
 
@@ -18,11 +21,12 @@ const CURRENT_USER = {
 export default function TodoApp() {
   const { todos, isLoading, isError, updateTodos } = useTodos();
   const { data: users = [] } = useUsers();
-
-  const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
+  const { showToast } = useToast();
+  const { theme, toggleTheme } = useTheme();
+  const [filter, setFilter] = useState<"All" | "Active" | "Completed">("All");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [selectedUser, setSelectedUser] = useState<number | "all">("all");
+  const [selectedUser, setSelectedUser] = useState<number | "All">("All");
 
   const allUsers = useMemo(() => {
     const exists = users.some(u => u.name === CURRENT_USER.name);
@@ -31,10 +35,10 @@ export default function TodoApp() {
 
   const filtered = useMemo(() => {
     return todos.filter(t => {
-      if (filter === "active" && t.completed) return false;
-      if (filter === "completed" && !t.completed) return false;
+      if (filter === "Active" && t.completed) return false;
+      if (filter === "Completed" && !t.completed) return false;
       if (search && !t.title.toLowerCase().includes(search.toLowerCase())) return false;
-      if (selectedUser !== "all" && t.userId !== selectedUser) return false;
+      if (selectedUser !== "All" && t.userId !== selectedUser) return false;
       return true;
     });
   }, [todos, filter, search, selectedUser]);
@@ -62,20 +66,43 @@ export default function TodoApp() {
   if (isError) return <p className="p-4 text-red-500">Failed to load todos</p>;
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Todo App</h1>
+    <div className="
+      w-full
+      max-w-2xl
+      mx-auto
+      px-4 py-4 sm:px-6 sm:py-6
+      space-y-4 sm:space-y-6 
+      relative z-10
+    ">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Todo App</h1>
+
+        <button
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+          className="
+            p-2 rounded-full border
+            hover:bg-gray-100 dark:hover:bg-gray-800
+            transition
+          "
+        >
+          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+        </button>
+      </div>
 
       <TodoForm
-        onAdd={(title) =>
-          updateTodos(prev => [
-            {
-              id: Date.now(),
-              title,
-              completed: false,
-              userId: CURRENT_USER.id,
-            },
-            ...prev,
-          ])
+        onAdd={(title) => {
+            updateTodos(prev => [
+              {
+                id: Date.now(),
+                title,
+                completed: false,
+                userId: CURRENT_USER.id,
+              },
+              ...prev,
+            ])
+            showToast("Todo created!", "success");
+          }
         }
       />
 
@@ -93,24 +120,34 @@ export default function TodoApp() {
       <TodoList
         todos={paginatedTodos}
         users={allUsers}
-        onToggle={(id) =>
-          updateTodos(prev =>
-            prev.map(t =>
-              t.id === id ? { ...t, completed: !t.completed } : t
+        onToggle={(id) => {
+            updateTodos(prev =>
+              prev.map(t =>
+                t.id === id ? { ...t, completed: !t.completed } : t
+              )
             )
-          )
+            const todo = todos.find(t => t.id === id);
+            showToast(
+              todo?.completed ? "Return todo as active!" : "Todo completed!",
+              todo?.completed ? "info": "success"
+            );
+          }
         }
-        onDelete={(id) =>
-          updateTodos(prev => prev.filter(t => t.id !== id))
+        onDelete={(id) => {
+            updateTodos(prev => prev.filter(t => t.id !== id))
+            showToast("Todo deleted!", "error");
+          }
         }
-        onUpdate={(id, title) =>
-          updateTodos(prev =>
-            prev.map(t =>
-              t.id === id
-                ? { ...t, title, userId: CURRENT_USER.id }
-                : t
+        onUpdate={(id, title) => {
+            updateTodos(prev =>
+              prev.map(t =>
+                t.id === id
+                  ? { ...t, title, userId: CURRENT_USER.id }
+                  : t
+              )
             )
-          )
+            showToast("Todo updated!", "success");
+          }
         }
       />
 
