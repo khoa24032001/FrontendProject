@@ -18,11 +18,10 @@ const CURRENT_USER = {
   email: "anhkhoa@local.app",
 };
 
-export default function TodoApp() {
+export default function TodoApp({theme, toggleTheme}: {theme: string, toggleTheme: () => void}) {
   const { todos, isLoading, isError, updateTodos } = useTodos();
   const { data: users = [] } = useUsers();
   const { showToast } = useToast();
-  const { theme, toggleTheme } = useTheme();
   const [filter, setFilter] = useState<"All" | "Active" | "Completed">("All");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -67,95 +66,99 @@ export default function TodoApp() {
 
   return (
     <div className="
-      w-full
-      max-w-2xl
-      mx-auto
-      px-4 py-4 sm:px-6 sm:py-6
-      space-y-4 sm:space-y-6 
-      relative z-10
-    ">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Todo App</h1>
+        w-full
+        max-w-2xl
+        mx-auto
+        px-4 py-4 sm:px-6 sm:py-6
+        space-y-4 sm:space-y-6 
+        relative z-10 
+      ">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-primary-light dark:text-primary-dark">Todo App</h1>
 
-        <button
-          onClick={toggleTheme}
-          aria-label="Toggle theme"
-          className="
-            p-2 rounded-full border
-            hover:bg-gray-100 dark:hover:bg-gray-800
-            transition
-          "
-        >
-          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-        </button>
-      </div>
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="
+                p-2 rounded-full border
+                border-violet-800 dark:border-gray-700
+                bg-gray-100 text-violet-800
+                hover:scale-105
+                dark:bg-gray-800 dark:text-gray-100
+                hover:bg-gray-200 dark:hover:bg-gray-700
+                transition
+            "
+          >
+            {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+          </button>
+        </div>
 
-      <TodoForm
-        onAdd={(title) => {
-            updateTodos(prev => [
-              {
-                id: Date.now(),
-                title,
-                completed: false,
-                userId: CURRENT_USER.id,
-              },
-              ...prev,
-            ])
-            showToast("Todo created!", "success");
+        <TodoForm
+          onAdd={(title) => {
+              updateTodos(prev => [
+                {
+                  id: Date.now(),
+                  title,
+                  completed: false,
+                  userId: CURRENT_USER.id,
+                },
+                ...prev,
+              ])
+              showToast("Todo created!", "success");
+            }
           }
-        }
-      />
+        />
 
-      <TodoToolbar
-        filter={filter}
-        users={allUsers}
-        selectedUser={selectedUser}
-        onUserChange={setSelectedUser}
-        onFilterChange={setFilter}
-        onSearch={setSearch}
-      />
+        <TodoToolbar
+          filter={filter}
+          users={allUsers}
+          selectedUser={selectedUser}
+          onUserChange={setSelectedUser}
+          onFilterChange={setFilter}
+          onSearch={setSearch}
+        />
 
-      <TodoStats todos={filtered} />
+        <TodoStats todos={filtered} />
 
-      <TodoList
-        todos={paginatedTodos}
-        users={allUsers}
-        onToggle={(id) => {
-            updateTodos(prev =>
-              prev.map(t =>
-                t.id === id ? { ...t, completed: !t.completed } : t
+        <TodoList
+          todos={paginatedTodos}
+          users={allUsers}
+          onToggle={(id) => {
+              updateTodos(prev =>
+                prev.map(t =>
+                  t.id === id ? { ...t, completed: !t.completed } : t
+                )
               )
-            )
-            const todo = todos.find(t => t.id === id);
-            showToast(
-              todo?.completed ? "Return todo as active!" : "Todo completed!",
-              todo?.completed ? "info": "success"
-            );
+              const todo = todos.find(t => t.id === id);
+              showToast(
+                todo?.completed ? "Return todo as active!" : "Todo completed!",
+                todo?.completed ? "info": "success"
+              );
+            }
           }
-        }
-        onDelete={(id) => {
-            updateTodos(prev => prev.filter(t => t.id !== id))
-            showToast("Todo deleted!", "error");
+          onDelete={(id) => {
+              updateTodos(prev => prev.filter(t => t.id !== id))
+              showToast("Todo deleted!", "error");
+            }
           }
-        }
-        onUpdate={(id, title) => {
-            updateTodos(prev =>
-              prev.map(t =>
-                t.id === id
-                  ? { ...t, title, userId: CURRENT_USER.id }
-                  : t
+          onUpdate={(id, title) => {
+              updateTodos(prev =>
+                prev.map(t =>
+                  t.id === id
+                    ? { ...t, title, userId: CURRENT_USER.id }
+                    : t
+                )
               )
-            )
-            showToast("Todo updated!", "success");
+              showToast("Todo updated!", "success");
+            }
           }
-        }
-      />
+        />
 
-      <TodoPagination
-        page={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+        <TodoPagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
     </div>
   );
 }

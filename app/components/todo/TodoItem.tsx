@@ -36,8 +36,10 @@ export default function TodoItem({
       className="
         flex flex-col gap-2
         sm:flex-row sm:items-center sm:justify-between 
-        p-3 rounded-lg border dark:border-gray-800 
-        hover:bg-gray-50 dark:hover:bg-gray-900 
+        p-3 rounded-xl border
+        bg-gray-50 dark:bg-gray-900
+        border-gray-200 dark:border-gray-800
+        hover:bg-gray-100 dark:hover:bg-gray-800
         transition cursor-pointer
       "
     >
@@ -56,7 +58,11 @@ export default function TodoItem({
                 setIsEditing(false);
               }
             }}
-            className="rounded border px-2 py-1 dark:bg-gray-900"
+            className="
+              rounded border px-2 py-1
+              bg-white dark:bg-gray-900
+              border-gray-300 dark:border-gray-700
+            "
           />
         ) : (
           <>
@@ -68,12 +74,19 @@ export default function TodoItem({
                 type="checkbox"
                 checked={todo.completed}
                 onChange={onToggle}
+                className="w-4 h-4 rounded border-1 border-gray-300 
+                text-purple-600 
+                focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
+                dark:border-gray-500 dark:bg-gray-800 dark:checked:bg-purple-500
+                dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900
+                cursor-pointer transition-all
+                hover:border-purple-400 dark:hover:border-gray-400"
               />
               <span
                 className={
                   todo.completed
                     ? "line-through text-gray-500"
-                    : "font-medium"
+                    : "font-medium self-start"
                 }
               >
                 {todo.title}
@@ -91,13 +104,13 @@ export default function TodoItem({
       </div>
 
       <div
-        className="flex items-center gap-3 sm:ml-2"
+        className="flex items-center justify-center gap-3 sm:ml-2"
         onClick={(e) => e.stopPropagation()}
       >
         {!isEditing && (
           <button
             onClick={() => setIsEditing(true)}
-            className="text-blue-500 text-sm hover:underline cursor-pointer"
+            className="text-blue-500 text-sm font-bold hover:text-blue-600 hover:underline cursor-pointer"
           >
             Edit
           </button>
@@ -106,7 +119,7 @@ export default function TodoItem({
         {isEditing && (
           <button
             onClick={handleSave}
-            className="text-green-600 text-sm hover:underline cursor-pointer"
+            className="text-green-500 text-sm font-bold hover:text-green-600 hover:underline cursor-pointer"
           >
             Save
           </button>
@@ -114,9 +127,9 @@ export default function TodoItem({
 
         <button
           onClick={onDelete}
-          className="text-red-500 hover:text-red-600 text-sm cursor-pointer"
+          className="text-red-500 font-bold hover:text-red-600 hover:underline text-sm cursor-pointer"
         >
-          ✕
+          Delete
         </button>
       </div>
     </div>

@@ -1,14 +1,25 @@
 import TodoApp from "~/components/todo/TodoApp";
+import { useTheme } from "~/hooks/useTheme";
 
 export default function Welcome() {
-  return <div className="min-h-screen w-full relative bg-black">
-    {/* X Organizations Black Background with Top Glow */}
+  const { theme, toggleTheme } = useTheme();
+  return <div className="min-h-screen w-full relative overflow-hidden 
+  bg-app-light dark:bg-app-dark 
+  text-gray-900 dark:text-gray-100
+  ">
     <div
-      className="absolute inset-0 z-0"
+      className="absolute inset-0 z-0 pointer-events-none"
       style={{
-       background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(120, 180, 255, 0.25), transparent 70%), #000000",
+      backgroundImage: theme !== "dark" ? `
+        radial-gradient(circle at 30% 70%, rgba(173, 216, 230, 0.35), transparent 60%),
+        radial-gradient(circle at 70% 30%, rgba(255, 182, 193, 0.4), transparent 60%)` : `
+        radial-gradient(ellipse at 20% 30%, rgba(56, 189, 248, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.3) 0%, transparent 70%),
+        radial-gradient(ellipse at 60% 20%, rgba(236, 72, 153, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 40% 80%, rgba(34, 197, 94, 0.2) 0%, transparent 65%)
+        `,
       }}
     />
-    <TodoApp />;
+      <TodoApp theme={theme} toggleTheme={toggleTheme} />
   </div>
 }

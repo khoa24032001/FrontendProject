@@ -21,9 +21,13 @@ export default function TodoToolbar({
           <button
             key={f}
             onClick={() => onFilterChange(f)}
-            className={`px-3 py-1 rounded-lg border cursor-pointer ${
-              filter === f ? "bg-black text-white dark:bg-white dark:text-black" : ""
-            }`}
+            className={`px-3 py-1 rounded-lg border border-gray-300 cursor-pointer transition font-semibold
+              ${
+                filter === f
+                  ? "bg-purple-600 text-white dark:bg-white dark:text-black"
+                  : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }
+            `}
           >
             {f}
           </button>
@@ -36,9 +40,14 @@ export default function TodoToolbar({
           onChange={(e) =>
             onUserChange(e.target.value === "All" ? "All" : Number(e.target.value))
           }
-          className="rounded-lg border px-3 py-1 dark:bg-gray-900 md:w-40 cursor-pointer"
+          className="rounded-lg border px-3 py-1
+          bg-white dark:bg-gray-900
+          border-gray-300 dark:border-gray-700
+          focus:outline-none focus:ring-2 focus:ring-violet-400 dark:focus:ring-white
+          text-gray-900 dark:text-gray-100 
+          md:w-40 cursor-pointer"
         >
-          <option value="all">All users</option>
+          <option value="All">All users</option>
           {users.map(u => (
             <option key={u.id} value={u.id}>{u.name}</option>
           ))}
@@ -47,7 +56,13 @@ export default function TodoToolbar({
         <input
           placeholder="Search..."
           onChange={e => onSearch(e.target.value)}
-          className="rounded-lg border px-3 py-1 dark:bg-gray-900 sm:w-full md:w-48"
+          className="
+          rounded-lg border px-3 py-1
+          bg-white dark:bg-gray-900
+          focus:outline-none focus:ring-2 focus:ring-violet-400 dark:focus:ring-white
+          border-gray-300 dark:border-gray-700
+          text-gray-900 dark:text-gray-100 
+          sm:w-full md:w-48"
         />
       </div>
     </div>

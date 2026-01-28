@@ -14,19 +14,27 @@ export default function TodoPagination({
       <button
         disabled={page === 1}
         onClick={() => onPageChange(page - 1)}
-        className="px-3 py-2 sm:px-4 sm:py-2 rounded border disabled:opacity-40"
+        className="px-3 py-2 sm:px-4 sm:py-2 rounded border
+        bg-white dark:bg-gray-900
+        border-gray-300 dark:border-gray-700
+        hover:bg-gray-100 dark:hover:bg-gray-800
+        disabled:opacity-40 transition"
       >
         Prev
       </button>
 
-      <span className="text-sm text-gray-500">
+      <span className="text-sm text-gray-600 dark:text-gray-300">
         Page {page} / {totalPages}
       </span>
 
       <button
         disabled={page === totalPages}
         onClick={() => onPageChange(page + 1)}
-        className="px-3 py-2 sm:px-4 sm:py-2 rounded border disabled:opacity-40"
+        className="px-3 py-2 sm:px-4 sm:py-2 rounded border
+        bg-white dark:bg-gray-900
+        border-gray-300 dark:border-gray-700
+        hover:bg-gray-100 dark:hover:bg-gray-800
+        disabled:opacity-40 transition"
       >
         Next
       </button>

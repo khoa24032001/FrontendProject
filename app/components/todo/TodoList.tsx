@@ -20,7 +20,7 @@ export default function TodoList({
   onUpdate: (id: number, title: string) => void;
 }) {
   if (!todos.length)
-    return <p className="text-gray-500">No todos found.</p>;
+    return <p className="font-bold text-violet-600 dark:text-gray-200 text-center">No todos found.</p>;
 
   return (
     <div className="space-y-2">
