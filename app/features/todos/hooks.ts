@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
-import { fetchTodos } from "./api";
+import { fetchTodos, fetchUsers } from "./api";
 import type {Todo} from "./types";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 
@@ -25,4 +25,12 @@ export function useTodos() {
   };
 
   return { ...query, todos, updateTodos };
+}
+
+export function useUsers() {
+  return useQuery({
+    queryKey: ["users"],
+    queryFn: fetchUsers,
+    staleTime: 1000 * 60 * 5,
+  });
 }
