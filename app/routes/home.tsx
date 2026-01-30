@@ -4,8 +4,8 @@ import { QueryClientProvider,QueryClient } from "react-query";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Todo App" },
+    { name: "description", content: "React Challenge" },
   ];
 }
 const queryClient = new QueryClient()

@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 
 export function useLocalStorage<T>(key: string, initial: T) {
-  const [value, setValue] = useState<T>(initial);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const [value, setValue] = useState<T>(() => {
+    if (typeof window === "undefined") return initial;
 
     try {
       const stored = window.localStorage.getItem(key);
-      if (stored) {
-        setValue(JSON.parse(stored));
-      }
+      return stored ? JSON.parse(stored) : initial;
     } catch (err) {
       console.warn("Failed to read localStorage", err);
+      return initial;
     }
-  }, [key]);
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") return;

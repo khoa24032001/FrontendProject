@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { fetchTodos, fetchUsers } from "./api";
 import type {Todo} from "./types";
@@ -11,8 +12,13 @@ export function useTodos() {
     queryKey: ["todos"],
     queryFn: fetchTodos,
     enabled: localTodos.length === 0,
-    onSuccess: (data) => setLocalTodos(data),
   });
+
+  useEffect(() => {
+    if (query.data && localTodos.length === 0) {
+      setLocalTodos(query.data);
+    }
+  }, [query.data, localTodos.length, setLocalTodos]);
 
   const todos = localTodos.length ? localTodos : query.data ?? [];
 
